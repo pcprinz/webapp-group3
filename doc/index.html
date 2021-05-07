@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Movie Database</title>
+    <meta
+      name="description"
+      content="A plain JS app with constraint validation."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="icon" href="favicon.svg" />
+    <link rel="mask-icon" href="mask-icon.svg" color="#000000" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.json" />
+
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/main.css" />
+
+    <script type="module">
+      // the .mjs file types were working but linted by my ESLint configuration.
+      import { MovieStorage } from "./src/m/MovieStorage.js";
+      const clearButton = document.getElementById("clearData");
+      const createTestDataButton = document.getElementById("createTestData");
+
+      // set event handlers for the buttons
+      clearButton.addEventListener("click", function () {
+        MovieStorage.clear();
+      });
+      createTestDataButton.addEventListener("click", function () {
+        MovieStorage.createTestData();
+      });
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <div class="wrapper clearfix">
+        <div class="title">
+          <h1>Movie Database</h1>
+          <h2>Manage information about movies</h2>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="createMovie.html">C</a></li>
+            <li><a href="retrieveAndListAllMovies.html">R</a></li>
+            <li><a href="updateMovie.html">U</a></li>
+            <li><a href="deleteMovie.html">D</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="wrapper clearfix">
+        <p>This app supports the following operations:</p>
+        <div class="two-col-menu">
+          <menu class="crud">
+            <li><a href="createMovie.html">Add a new movie</a></li>
+            <li><a href="retrieveAndListAllMovies.html">List all movies</a></li>
+            <li><a href="updateMovie.html">Update a movie</a></li>
+            <li><a href="deleteMovie.html">Delete a movie</a></li>
+          </menu>
+          <menu>
+            <li>
+              <button type="button" id="clearData">Clear database</button>
+            </li>
+            <li>
+              <button type="button" id="createTestData">
+                Create test data
+              </button>
+            </li>
+          </menu>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-content wrapper">
+        This is the assignment application built on the tutorial for the course
+        12431 Web Applications | SS 2021. Student: Christian Prinz - B.Sc
+        Informations- und Medientechnik
+      </div>
+    </footer>
+  </body>
+</html>

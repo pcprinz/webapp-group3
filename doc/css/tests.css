@@ -1,0 +1,9 @@
+.passedRow {
+  color: green;
+  background-color: white;
+}
+
+.failedRow {
+  background-color: red;
+  color: white;
+}

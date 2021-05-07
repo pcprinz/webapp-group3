@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Movie Database - TEST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tests.css" />
+    <script type="module">
+      import { tests } from "./util.test.js";
+      const tableBody = document.querySelector("table").querySelector("tbody");
+
+      tests.forEach(test => {
+        const row = tableBody.insertRow();
+        row.insertCell().textContent = test.name;
+        if (test.result === true) {
+          row.insertCell().textContent = "PASSED";
+          row.className = "passedRow";
+        } else {
+          row.className = "failedRow";
+          const cell = row.insertCell();
+          const list = document.createElement("ul");
+          test.result.forEach(errorMsg => {
+            const listItem = document.createElement("li");
+            listItem.textContent = errorMsg
+            list.appendChild(listItem);
+          })
+
+          cell.appendChild(list);
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <div class="wrapper clearfix">
+        <div class="title">
+          <h1>Test Results</h1>
+        </div>
+    </header>
+    <main>
+      <div class="wrapper clearfix">
+        <figure>
+          <figcaption>All available tests</figcaption>
+          <table id="tests">
+            <thead>
+              <tr>
+                <th id="name">Test name</th>
+                <th id="results">Results</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </figure>
+      </div>
+    </main>
+  </body>
+</html>
