@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Movie Database</title>
+    <title>Public Library</title>
     <meta
       name="description"
       content="A plain JS app with constraint validation."
@@ -19,18 +19,14 @@
     <link rel="stylesheet" href="css/main.css" />
 
     <script type="module">
-      // the .mjs file types were working but linted by my ESLint configuration.
-      import { MovieStorage } from "./src/m/MovieStorage.js";
-      const clearButton = document.getElementById("clearData");
-      const createTestDataButton = document.getElementById("createTestData");
-
-      // set event handlers for the buttons
-      clearButton.addEventListener("click", function () {
-        MovieStorage.clear();
-      });
-      createTestDataButton.addEventListener("click", function () {
-        MovieStorage.createTestData();
-      });
+      import { clearData, generateTestData } from "./src/c/app.mjs";
+      const clearButton = document.getElementById("clearData"),
+        generateTestDataButtons = document.querySelectorAll("button.generateTestData");
+      // Set event handlers for the buttons "clearData" and "generateTestData"
+      clearButton.addEventListener("click", clearData);
+      for (const btn of generateTestDataButtons) {
+        btn.addEventListener("click", generateTestData);
+      }
     </script>
   </head>
 
@@ -39,37 +35,29 @@
       <div class="wrapper clearfix">
         <div class="title">
           <h1>Movie Database</h1>
-          <h2>Manage information about movies</h2>
+          <h2>Manage information about movies and persons</h2>
         </div>
         <nav>
           <ul>
-            <li><a href="createMovie.html">C</a></li>
-            <li><a href="retrieveAndListAllMovies.html">R</a></li>
-            <li><a href="updateMovie.html">U</a></li>
-            <li><a href="deleteMovie.html">D</a></li>
+            <li><a href="mainMovie.html">Movie</a></li>
+            <li><a href="mainPerson.html">Person</a></li>
           </ul>
         </nav>
       </div>
     </header>
     <main>
       <div class="wrapper clearfix">
-        <p>This app supports the following operations:</p>
+        <p>This app supports the following managing options:</p>
         <div class="two-col-menu">
           <menu class="crud">
-            <li><a href="createMovie.html">Add a new movie</a></li>
-            <li><a href="retrieveAndListAllMovies.html">List all movies</a></li>
-            <li><a href="updateMovie.html">Update a movie</a></li>
-            <li><a href="deleteMovie.html">Delete a movie</a></li>
+            <li><a href="mainMovie.html">Manage movie data</a></li>
+            <li><a href="mainPerson.html">Manage person data</a></li>
           </menu>
           <menu>
             <li>
               <button type="button" id="clearData">Clear database</button>
             </li>
-            <li>
-              <button type="button" id="createTestData">
-                Create test data
-              </button>
-            </li>
+            <li><button type="button" class="generateTestData">Generate test data</button></li>
           </menu>
         </div>
       </div>
@@ -77,8 +65,8 @@
     <footer>
       <div class="foot-content wrapper">
         This is the assignment application built on the tutorial for the course
-        12431 Web Applications | SS 2021. Student: Christian Prinz - B.Sc
-        Informations- und Medientechnik
+        12431 Web Applications | SS 2021. Students: Christian Prinz - B.Sc
+        Informations- und Medientechnik and Max Bergmann B.Sc Computer Science
       </div>
     </footer>
   </body>

@@ -106,7 +106,7 @@ class _PersonStorage {
   destroy(personId, onDestroy) {
     if (this._instances[personId]) {
       // call onDestroy to make sure the references can be deleted to
-      onDestroy(this._instances[personId]);
+      // onDestroy(this._instances[personId]);
 
       // delete the Person
       console.info(`${this._instances[personId].toString()} deleted`);
@@ -218,16 +218,16 @@ class _PersonStorage {
    * clears all `Person`s from the `this.instances`
    */
   clear() {
-    if (confirm("Do you really want to delete all person?")) {
-      try {
-        this._instances = {};
-        localStorage[PERSON_STORAGE_KEY] = "{}";
-        this.setNextId(1);
-        console.info("All data cleared.");
-      } catch (e) {
-        console.warn(`${e.constructor.name}: ${e.message}`);
-      }
+    // if (confirm("Do you really want to delete all person?")) {
+    try {
+      this._instances = {};
+      localStorage[PERSON_STORAGE_KEY] = "{}";
+      this.setNextId(1);
+      console.info("All person records cleared.");
+    } catch (e) {
+      console.warn(`${e.constructor.name}: ${e.message}`);
     }
+    // }
   }
 
   /**

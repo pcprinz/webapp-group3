@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Person Database</title>
+    <meta
+      name="description"
+      content="A plain JS app with constraint validation."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="icon" href="favicon.svg" />
+    <link rel="mask-icon" href="mask-icon.svg" color="#000000" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.json" />
+
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/main.css" />
+
+    <script src="src/v/person.mjs" type="module"></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="wrapper clearfix">
+        <div class="title">
+          <h1>Person Database</h1>
+          <h2>Manage information about persons</h2>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mainMovie.html">Movie</a></li>
+            <li><a href="mainPerson.html">Person</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="wrapper clearfix">
+        <section id="Person-M" class="UI-Page">
+          <p>This app supports the following person managing options:</p>
+          <div class="two-col-menu">
+            <ul class="menu">
+              <li><button type="button", id="retrieveAndListAll">List all persons</button></li>
+              <li><button type="button", id="create">Create a person</button></li>
+              <li><button type="button", id="update">Update person</button></li>
+              <li><button type="button", id="destroy">Delete person</button></li>
+            </ul>
+          </div>
+        </section>
+        <section id="Person-R" class="UI-Page">
+          <h1>Retrieve and list all person records</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Person ID</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="button">
+            <button type="button" class="back-to-menu">Back to person menu</button>
+          </div>
+        </section>
+        <section id="Person-C" class="UI-Page">
+          <h1>Create a new person record</h1>
+          <form>
+            <div class="field">
+              <label>ID: <input type="number" name="personid"/></label>
+            </div>
+            <div class="field">
+              <label>Name: <input type="text" name="name"/></label>
+            </div>
+            <div class="button-group">
+              <button type="submit" name="commit">Save</button>
+              <button type="button" class="back-to-menu">Back to person menu</button>
+            </div>
+          </form>
+        </section>
+        <section id="Person-U" class="UI-Page">
+          <h1>Update a person record</h1>
+          <form autocomplete="off">
+            <div class="select-one">
+              <label>Select person: <select name="selectPerson"></select></label>
+            </div>
+            <div class="field">
+              <label>Person ID:
+                <output name="personid"></output>
+              </label>
+            </div>
+            <div class="field">
+              <label>Name: <input type="text" name="name"/></label>
+            </div>
+            <div class="button-group">
+              <button type="submit" name="commit" disabled="disabled">Save</button>
+              <button type="button" class="back-to-menu">Back to person menu</button>
+            </div>
+          </form>
+        </section>
+        <section id="Person-D" class="UI-Page">
+          <h1>Delete a person record</h1>
+          <form>
+            <div class="select-one">
+              <label>Select person: <select name="selectPerson"></select></label>
+            </div>
+            <div class="button-group">
+              <button type="submit" name="commit">Delete</button>
+              <button type="button" class="back-to-menu">Back to person menu</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-content wrapper">
+        This is the assignment application built on the tutorial for the course
+        12431 Web Applications | SS 2021. Students: Christian Prinz - B.Sc
+        Informations- und Medientechnik and Max Bergmann B.Sc Computer Science
+      </div>
+    </footer>
+  </body>
+</html>

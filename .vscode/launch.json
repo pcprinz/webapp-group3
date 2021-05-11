@@ -9,7 +9,7 @@
             "type": "firefox",
             "request": "launch",
             "reAttach": true,
-            "file": "${workspaceFolder}/doc/index.html"
+            "file": "${workspaceFolder}/docs/index.html"
         },
     ]
 }

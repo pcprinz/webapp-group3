@@ -1,5 +1,5 @@
 import { cloneObject, compareDates } from "../../lib/util.js";
-import { Movie, GenreEL, MovieRatingEL } from "./Movie.js";
+import { Movie } from "./Movie.js";
 import { Person } from "./Person.js";
 import { PersonStorage } from "./PersonStorage.js";
 
@@ -9,8 +9,6 @@ const MOVIES_STORAGE_KEY = "movies";
 /** The slots for updating a `Movie`
  * @typedef {object} MovieUpdateSlots
  * @property {string | undefined} title
- * @property {number[] | undefined} genres
- * @property {number | undefined} rating
  * @property {Date | undefined} releaseDate
  * @property {number | Person | undefined} director
  * @property {Person[] | number[] | {[key: number]: Person} | undefined} actorsToAdd
@@ -66,12 +64,10 @@ class _MovieStorage {
     const {
       movieId,
       title,
-      rating,
-      genres,
       releaseDate,
       director,
-      actorsToAdd,
-      actorsToRemove,
+      actorsIdRefsToAdd,
+      actorsIdRefsToRemove,
     } = slots;
     let noConstraintViolated = true;
     let updatedProperties = [];
@@ -86,16 +82,16 @@ class _MovieStorage {
       }
 
       // update rating
-      if (movie.rating !== rating) {
-        movie.rating = rating;
-        updatedProperties.push("rating");
-      }
+      // if (movie.rating !== rating) {
+      //   movie.rating = rating;
+      //   updatedProperties.push("rating");
+      // }
 
-      // update genres
-      if (!movie.genres.isEqualTo(genres)) {
-        movie.genres = genres;
-        updatedProperties.push("genres");
-      }
+      // // update genres
+      // if (!movie.genres.isEqualTo(genres)) {
+      //   movie.genres = genres;
+      //   updatedProperties.push("genres");
+      // }
 
       // update releaseDate
       switch (compareDates(releaseDate, movie.releaseDate)) {
@@ -127,12 +123,12 @@ class _MovieStorage {
       }
 
       // actors
-      if (actorsToAdd) {
-        movie.addActors(actorsToAdd);
+      if (actorsIdRefsToAdd) {
+        movie.addActors(actorsIdRefsToAdd);
         updatedProperties.push("actors(added)");
       }
-      if (actorsToRemove) {
-        movie.removeActors(actorsToRemove);
+      if (actorsIdRefsToRemove) {
+        movie.removeActors(actorsIdRefsToRemove);
         updatedProperties.push("actors(removed)");
       }
     } catch (e) {
@@ -166,14 +162,14 @@ class _MovieStorage {
    * @param {MovieUpdateSlots} slots to update on all (filtered) movies
    * @param {(movie: Movie) => boolean} filter that the movies have to fulfill with `true` to be updated (defaults to all movies)
    */
-  updateAll(slots, filter = (a) => true) {
-    for (const mKey in this._instances) {
-      if (Object.hasOwnProperty.call(this._instances, mKey)) {
-        const movie = this._instances[mKey];
-        filter(movie) && this.update({ movieId: movie.movieId, ...slots });
-      }
-    }
-  }
+  // updateAll(slots, filter = (a) => true) {
+  //   for (const mKey in this._instances) {
+  //     if (Object.hasOwnProperty.call(this._instances, mKey)) {
+  //       const movie = this._instances[mKey];
+  //       filter(movie) && this.update({ movieId: movie.movieId, ...slots });
+  //     }
+  //   }
+  // }
 
   /**
    * deletes the `Movie` with the corresponding `movieId` from the Storage
@@ -201,13 +197,13 @@ class _MovieStorage {
    * - the `filter` is optional and defaults to *all movies*
    * @param {(movie: Movie) => boolean} filter that the movies have to fulfill with `true` to be deleted (defaults to all movies)
    */
-  destroyAll(filter = (a) => true) {
-    for (const mKey in this._instances) {
-      if (Object.hasOwnProperty.call(this._instances, mKey)) {
-        filter(this._instances[mKey]) && delete this._instances[mKey];
-      }
-    }
-  }
+  // destroyAll(filter = (a) => true) {
+  //   for (const mKey in this._instances) {
+  //     if (Object.hasOwnProperty.call(this._instances, mKey)) {
+  //       filter(this._instances[mKey]) && delete this._instances[mKey];
+  //     }
+  //   }
+  // }
 
   /**
    * loads all stored Movies from the `localStorage`, parses them and stores them
@@ -306,16 +302,16 @@ class _MovieStorage {
    * clears all `Movie`s from the `this.instances`
    */
   clear() {
-    if (confirm("Do you really want to delete all movies?")) {
-      try {
-        this._instances = {};
-        localStorage[MOVIES_STORAGE_KEY] = "{}";
-        this.setNextId(1);
-        console.info("All data cleared.");
-      } catch (e) {
-        console.warn(`${e.constructor.name}: ${e.message}`);
-      }
+    // if (confirm("Do you really want to delete all movies?")) {
+    try {
+      this._instances = {};
+      localStorage[MOVIES_STORAGE_KEY] = "{}";
+      this.setNextId(1);
+      console.info("All movie records cleared.");
+    } catch (e) {
+      console.warn(`${e.constructor.name}: ${e.message}`);
     }
+    // }
   }
 
   /**
@@ -327,8 +323,8 @@ class _MovieStorage {
       this._instances[1] = new Movie({
         movieId: 1,
         title: "Pulp Fiction",
-        rating: MovieRatingEL["R"],
-        genres: [GenreEL["CRIME"], GenreEL["DRAMA"]],
+        // rating: MovieRatingEL["R"],
+        // genres: [GenreEL["CRIME"], GenreEL["DRAMA"]],
         releaseDate: new Date("1994-05-12"),
         director: 3,
         actors: [5, 6],
@@ -336,13 +332,13 @@ class _MovieStorage {
       this._instances[2] = new Movie({
         movieId: 2,
         title: "Star Wars",
-        rating: MovieRatingEL["PG"],
-        genres: [
-          GenreEL["ACTION"],
-          GenreEL["ADVENTURE"],
-          GenreEL["FANTASY"],
-          GenreEL["SCI_FI"],
-        ],
+        // rating: MovieRatingEL["PG"],
+        // genres: [
+        //   GenreEL["ACTION"],
+        //   GenreEL["ADVENTURE"],
+        //   GenreEL["FANTASY"],
+        //   GenreEL["SCI_FI"],
+        // ],
         releaseDate: new Date("1977-05-25"),
         director: 2,
         actors: [7, 8],
@@ -350,8 +346,8 @@ class _MovieStorage {
       this._instances[3] = new Movie({
         movieId: 3,
         title: "Dangerous Liaisons",
-        rating: MovieRatingEL["R"],
-        genres: [GenreEL["ROMANCE"], GenreEL["DRAMA"]],
+        // rating: MovieRatingEL["R"],
+        // genres: [GenreEL["ROMANCE"], GenreEL["DRAMA"]],
         releaseDate: new Date("1972-03-15"),
         director: 1,
         actors: [9, 5],

@@ -55,6 +55,20 @@ export class Person {
   }
 
   /**
+   * sets a new personId
+   * - @private this is just used internally though the id is frozen
+   * @param {number} personId
+  */
+  set personId(personId) {
+    const validationResult = Person.checkPersonId(personId);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._personId = parseStringInteger(personId);
+    } else {
+      throw validationResult;
+    }
+  }
+
+  /**
    * checks if the given personId is present, >0 and unique
    * @param {number | string} personId
    * @returns a ConstraintViolation
@@ -103,25 +117,22 @@ export class Person {
     return validationResult;
   }
 
-  /**
-   * sets a new personId
-   * - @private this is just used internally though the id is frozen
-   * @param {number} personId
-   */
-  set personId(personId) {
-    const validationResult = Person.checkPersonId(personId);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._personId = parseStringInteger(personId);
-    } else {
-      throw validationResult;
-    }
-  }
 
   // *** name ****************************************************************
 
   /** @returns {string} the official name of the person */
   get name() {
     return this._name;
+  }
+
+  /** @param {string} name - the new name to set */
+  set name(name) {
+    const validationResult = Person.checkName(name);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._name = name.trim();
+    } else {
+      throw validationResult;
+    }
   }
 
   /**
@@ -148,15 +159,6 @@ export class Person {
     }
   }
 
-  /** @param {string} name - the new name to set */
-  set name(name) {
-    const validationResult = Person.checkName(name);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._name = name.trim();
-    } else {
-      throw validationResult;
-    }
-  }
 
   // *** serialization ********************************************************
 

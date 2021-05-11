@@ -82,13 +82,13 @@ export class Movie {
    * @private
    * @type {number}
    */
-  _rating;
+  // _rating;
   /** the genres the movie is associated to
    * - required multiValue
    * @private
    * @type {number[]}
    */
-  _genres;
+  // _genres;
   /** the date the movie was released
    * - optional
    * - Date
@@ -119,8 +119,8 @@ export class Movie {
   constructor({
     movieId,
     title,
-    rating,
-    genres,
+    // rating,
+    // genres,
     releaseDate,
     director,
     actors,
@@ -128,10 +128,10 @@ export class Movie {
     if (arguments.length > 0) {
       this.movieId = movieId;
       this.title = title;
-      this.genres = genres;
-      if (rating) {
-        this.rating = rating;
-      }
+      // this.genres = genres;
+      // if (rating) {
+      //   this.rating = rating;
+      // }
       if (releaseDate) {
         // @ts-ignore
         this.releaseDate = releaseDate;
@@ -141,6 +141,8 @@ export class Movie {
       if (actors) {
         // @ts-ignore
         this.actors = actors;
+      } else {
+        this.actors = [];
       }
     }
   }
@@ -152,6 +154,20 @@ export class Movie {
    */
   get movieId() {
     return this._movieId;
+  }
+
+  /**
+   * sets a new movieId
+   * - @private this is just used internally though the id is frozen
+   * @param {number} movieId
+   */
+   set movieId(movieId) {
+    const validationResult = Movie.checkMovieId(movieId);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._movieId = parseStringInteger(movieId);
+    } else {
+      throw validationResult;
+    }
   }
 
   /**
@@ -181,25 +197,23 @@ export class Movie {
     }
   }
 
-  /**
-   * sets a new movieId
-   * - @private this is just used internally though the id is frozen
-   * @param {number} movieId
-   */
-  set movieId(movieId) {
-    const validationResult = Movie.checkMovieId(movieId);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._movieId = parseStringInteger(movieId);
-    } else {
-      throw validationResult;
-    }
-  }
+  
 
   // *** title ****************************************************************
 
   /** @returns {string} the official title of the movie */
   get title() {
     return this._title;
+  }
+
+  /** @param {string} title - the new title to set */
+  set title(title) {
+    const validationResult = Movie.checkTitle(title);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._title = title.trim();
+    } else {
+      throw validationResult;
+    }
   }
 
   /**
@@ -226,21 +240,21 @@ export class Movie {
     }
   }
 
-  /** @param {string} title - the new title to set */
-  set title(title) {
-    const validationResult = Movie.checkTitle(title);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._title = title.trim();
-    } else {
-      throw validationResult;
-    }
-  }
-
   // *** releaseDate **********************************************************
 
   /** @ts-ignore @returns {Date} the date the movie was released */
   get releaseDate() {
     return this._releaseDate;
+  }
+
+  /** @ts-ignore @param {Date |string} date - the new date to set */
+  set releaseDate(date) {
+    const validationResult = Movie.checkReleaseDate(date);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._releaseDate = parseDate(date);
+    } else {
+      throw validationResult;
+    }
   }
 
   /**
@@ -263,16 +277,6 @@ export class Movie {
       );
     } else {
       return new NoConstraintViolation();
-    }
-  }
-
-  /** @ts-ignore @param {Date |string} date - the new date to set */
-  set releaseDate(date) {
-    const validationResult = Movie.checkReleaseDate(date);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._releaseDate = parseDate(date);
-    } else {
-      throw validationResult;
     }
   }
 
@@ -393,11 +397,6 @@ export class Movie {
     return this._director;
   }
 
-  /** @param {number} director_id */
-  static checkDirector(director_id) {
-    return Person.checkPersonIdAsIdRef(director_id);
-  }
-
   /** @ts-ignore @param {Person | number} director the `Person` or it's `personId` */
   set director(director) {
     const director_id =
@@ -411,11 +410,23 @@ export class Movie {
     }
   }
 
+  /** @param {number} director_id */
+  static checkDirector(director_id) {
+    return Person.checkPersonIdAsIdRef(director_id);
+  }
+
   // *** actors ***************************************************************
 
   /** @ts-ignore @returns {{[key: number]: Person}} a Map of actors (*key = `person.Id`*) starring the movie */
   get actors() {
     return this._actors;
+  }
+
+  /** @ts-ignore @param {Person[] | number[] | {[key: number]: Person} | undefined} actors an array of `Person`s or an array of `personId`s or a `Map<personId, Person>` */
+  set actors(actors) {
+    // clear and add actors
+    this._actors = {};
+    this.addActors(actors);
   }
 
   /** @param {number} actor */
@@ -480,12 +491,6 @@ export class Movie {
     }
   }
 
-  /** @ts-ignore @param {Person[] | number[] | {[key: number]: Person} | undefined} actors an array of `Person`s or an array of `personId`s or a `Map<personId, Person>` */
-  set actors(actors) {
-    // clear and add actors
-    this._actors = {};
-    this.addActors(actors);
-  }
 
   // *** serialization ********************************************************
 
@@ -547,18 +552,8 @@ export class Movie {
 
   /** @returns the stringified Movie */
   toString() {
-    return `Movie{ 
-  movieId: ${this.movieId}, 
-  title: ${this.title}, 
-  rating: ${this.rating ? MovieRatingEL.labels[this.rating] : "undefined"},
-  genres: ${GenreEL.stringify(this.genres)},
-  releaseDate: ${
-    this._releaseDate ? this.releaseDate.toLocaleDateString() : "undefined"
-  },
-  director: ${this._director.toString},
-  actors: ${Object.keys(this._actors)
-    .map((aKey) => this.actors[aKey].name())
-    .join(", ")}
-}`;
+    var actorsString = this._actors ? this._actors.toString() : "";
+    var movieStr = `Movie{movieId: ${this.movieId}, title: ${this.title}, releaseDate: ${this._releaseDate ? this.releaseDate.toLocaleDateString() : "undefined"}, director: ${this._director.toString()}`
+    return actorsString ? movieStr + ", " +  actorsString : movieStr + "}";
   }
 }
